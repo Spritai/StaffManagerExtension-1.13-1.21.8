@@ -1,0 +1,9 @@
+name: StaffManagerTest
+version: 1.0
+main: fr.spritai.staffManagerExtension.StaffManagerExtension
+api-version: 1.13
+commands:
+  staffmanager:
+    description: Manage staff data
+    usage: /staffmanager <list|purge>
+    aliases: [sm, staffm]
