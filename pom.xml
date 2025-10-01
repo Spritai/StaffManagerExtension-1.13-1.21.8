@@ -36,7 +36,7 @@
 
     <build>
         <plugins>
-            <!-- Compiler plugin -->
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -47,7 +47,7 @@
                 </configuration>
             </plugin>
 
-            <!-- Shade plugin pour inclure Gson -->
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>

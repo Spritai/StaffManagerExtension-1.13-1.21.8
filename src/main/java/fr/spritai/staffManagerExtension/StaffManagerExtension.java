@@ -33,14 +33,15 @@ public final class StaffManagerExtension extends JavaPlugin implements Listener 
     private HttpServer httpServer;
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private String apiToken;
+    private int httpPort;
 
-    // Données persistées
+
     private Map<String, List<StaffMessage>> staffMessages = new ConcurrentHashMap<>();
     private Map<String, Map<String, Long>> staffPlaytime = new ConcurrentHashMap<>();
     private Map<UUID, Long> sessionStart = new ConcurrentHashMap<>();
     private Map<String, Object> allStaffs = new ConcurrentHashMap<>();
 
-    // Fichiers
+
     private File messagesFile;
     private File playtimeFile;
     private File staffFile;
@@ -52,6 +53,7 @@ public final class StaffManagerExtension extends JavaPlugin implements Listener 
 
         saveDefaultConfig();
         apiToken = getConfig().getString("api-token");
+        httpPort = getConfig().getInt("http-port", 8080); // Port configurable
 
         messagesFile = new File(getDataFolder(), "messages.json");
         playtimeFile = new File(getDataFolder(), "playtime.json");
@@ -114,7 +116,7 @@ public final class StaffManagerExtension extends JavaPlugin implements Listener 
         return true;
     }
 
-    // -------- Events -------- //
+
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
@@ -212,7 +214,7 @@ public final class StaffManagerExtension extends JavaPlugin implements Listener 
 
     private void startHttpServer() {
         try {
-            httpServer = HttpServer.create(new InetSocketAddress(8080), 0);
+            httpServer = HttpServer.create(new InetSocketAddress(httpPort), 0);
 
             httpServer.createContext("/staffs", new StaffHandler());
             httpServer.createContext("/staffs/messages", new MessagesHandler());
@@ -220,7 +222,7 @@ public final class StaffManagerExtension extends JavaPlugin implements Listener 
 
             httpServer.setExecutor(null);
             httpServer.start();
-            getLogger().info("§eServer HTTP started on port 8080");
+            getLogger().info("§eServer HTTP started on port " + httpPort);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -303,7 +305,7 @@ public final class StaffManagerExtension extends JavaPlugin implements Listener 
         }
     }
 
-    // -------- Stock Timestamp -------- //
+
     public static class StaffMessage {
         private String message;
         private String timestamp;
